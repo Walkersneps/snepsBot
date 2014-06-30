@@ -1,4 +1,6 @@
-snepsBot
+SnepsBot
+========
+** SuperWalkers's bot ultra powah **
 ========
 
-SnepsBot - a.k.a. The SuperWalkers's bot ultra powah
+Welcome to the SnepsBot's GitHub page!
