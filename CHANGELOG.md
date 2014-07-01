@@ -8,8 +8,6 @@
 + Give the bot a live
 
 =======
-
-=======
 ## Version 0.8 :
 + + Changelog command
 + + OldChanges command
