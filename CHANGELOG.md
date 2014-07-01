@@ -1,9 +1,9 @@
 *** SnepsBot Changelog ***
 =======
-=======
 
 
-========
+===
+::::::::::
 ## Versions 0.1 - 0.7 :
 + Give the bot a live
 
