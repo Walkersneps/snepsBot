@@ -454,7 +454,7 @@ public class SnepsBot extends PircBot {
         try {
             if (message.startsWith(",stalk")) {
                 String stalkMode = message.split(" ")[1];
-                String toStalkNow = message.split(" ")[1];
+                String toStalkNow = message.split(" ")[2];
                 if (stalkMode.equalsIgnoreCase("start")) {
                     if (toStalk1.equals(null)) {
                         toStalk1 = toStalkNow;
