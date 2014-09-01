@@ -2,6 +2,7 @@ import org.jibble.pircbot.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,6 +21,7 @@ public class SnepsBot extends PircBot {
     public String toStalk3;
     public String stalkSentence;
     public Boolean figletMuted = false;
+    public static ArrayList<String> stalkingPeople = new ArrayList<>(3);
 
 
     public void stalkExtraction (){
@@ -89,7 +91,7 @@ public class SnepsBot extends PircBot {
         }
 
         //stalk
-        if(sender.equalsIgnoreCase(toStalk1) || sender.equalsIgnoreCase(toStalk2) || sender.equalsIgnoreCase(toStalk3)){
+        if(stalkingPeople.contains(sender)){
             stalkExtraction();
             sendMessage(channel, stalkSentence);
         }
@@ -454,37 +456,14 @@ public class SnepsBot extends PircBot {
         try {
             if (message.startsWith(",stalk")) {
                 String stalkMode = message.split(" ")[1];
-                String toStalkNow = message.split(" ")[2];
+                String toStalkNowTemp = message.split(" ")[2];
+                String toStalkNow = toStalkNowTemp.toUpperCase();
                 if (stalkMode.equalsIgnoreCase("start")) {
-                    if (toStalk1.equals(null)) {
-                        toStalk1 = toStalkNow;
-                        sendMessage(channel, "I'm now stalking " + toStalkNow);
-                    } else if (toStalk1 != null && toStalk2.equals(null)) {
-                        toStalk2 = toStalkNow;
-                        sendMessage(channel, "I'm now stalking " + toStalkNow);
-                    } else if (toStalk1 != null && toStalk2 != null && toStalk3.equals(null)) {
-                        toStalk3 = toStalkNow;
-                        sendMessage(channel, "I'm now stalking " + toStalkNow);
-                    } else if (toStalk1 != null && toStalk2 != null && toStalk3 != null) {
-                        sendMessage(channel, "stalk queue is full, plese stop stalking " + toStalk1 + " or " + toStalk2 + " or " + toStalk3 + " to start stalking " + toStalkNow + ".");
-                    } else {
-                        sendMessage(channel, "BUZZZZ DHAFWFNS FNVSARAAGJ FATAL ERROR!!!!");
-                    }
+                   stalkingPeople.add(toStalkNow);
+                    sendMessage(channel, "I'm now stalking " + stalkingPeople);
                 } else if (stalkMode.equalsIgnoreCase("stop")) {
-                    if (toStalk1.equalsIgnoreCase(toStalkNow)) {
-                        toStalk1 = null;
+                    stalkingPeople.remove(toStalkNow);
                         sendMessage(channel, "I won't stalk " + toStalkNow + " anymore.");
-                    } else if (!toStalk1.equalsIgnoreCase(toStalkNow) && toStalk2.equalsIgnoreCase(toStalkNow)) {
-                        toStalk2 = null;
-                        sendMessage(channel, "I won't stalk " + toStalkNow + " anymore.");
-                    } else if (!toStalk1.equalsIgnoreCase(toStalkNow) && !toStalk2.equalsIgnoreCase(toStalkNow) && toStalk3.equalsIgnoreCase(toStalkNow)) {
-                        toStalk3 = null;
-                        sendMessage(channel, "I won't stalk " + toStalkNow + " anymore.");
-                    } else if (!toStalk1.equalsIgnoreCase(toStalkNow) && !toStalk2.equalsIgnoreCase(toStalkNow) && !toStalk3.equalsIgnoreCase(toStalkNow)) {
-                        sendMessage(channel, "I am not currently stalking " + toStalkNow + "! My stalking list is set to " + toStalk1 + " | " + toStalk2 + " | " + toStalk3);
-                    } else {
-                        sendMessage(channel, "BUZZZZ DHAFWFNS FNVSARAAGJ FATAL ERROR!!!!");
-                    }
                 } else {
                     sendMessage(channel, "Wrong arguments. Use 'start' or 'stop'");
                 }
