@@ -26,15 +26,17 @@ public class SnepsBot extends PircBot {
 
     public void stalkExtraction (){
         Random randomer = new Random();
-        int randomizedNumber = randomer.nextInt((1 - 4) + 1) + 1;
+        int randomizedNumber = randomer.nextInt((6) + 1) + 1;
         if (randomizedNumber == 1){
             stalkSentence = "Bla Bla Bla";
         } else if (randomizedNumber == 2){
-            stalkSentence = "Wouter is an asshole";
+            stalkSentence = "Happy Christmas!";
         } else if (randomizedNumber == 3){
             stalkSentence = "Fag, fAg, faG, FAg, FaG, fAG, FAAAAAAAAG";
         } else if (randomizedNumber == 4){
             stalkSentence = "Yeah, you're right: SuperWalkers is fucking cool!";
+        } else if (randomizedNumber == 5){
+            stalkSentence = "On the chair the goat sings, under the chair the goat cries";
         }
 
     }
@@ -91,9 +93,12 @@ public class SnepsBot extends PircBot {
         }
 
         //stalk
-        if(stalkingPeople.contains(sender)){
-            stalkExtraction();
-            sendMessage(channel, stalkSentence);
+        String senderup =  sender.toUpperCase();
+        if(canSpam) {
+            if (stalkingPeople.contains(senderup)) {
+                stalkExtraction();
+                sendMessage(channel, stalkSentence);
+            }
         }
 
         //leave channel
