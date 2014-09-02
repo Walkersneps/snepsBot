@@ -20,7 +20,7 @@ public class SnepsBotMain {
         bot.joinChannel("#SuperWalkers");
 
         //identify
-        bot.identify("empoleon");
+        bot.identify("password");
 
         //Says he has come
         //bot.sendMessage("#yncentral", "Hello everyone, I'm SnepsBot v.0.8. To know more about me, use the command ',info'");

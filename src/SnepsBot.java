@@ -14,14 +14,18 @@ public class SnepsBot extends PircBot {
     }
 
 
+    public String masterUser = "SuperWalkers";
+
+    public String gameBridge1 = "YodaPack";
+    public String gameBridge2 = "ResonantRise";
+    public String gameBridge3 = "CrackPack";
+
     public Boolean canSpam = false;
     public Boolean canStalk = false;
-    public String toStalk1;
-    public String toStalk2;
-    public String toStalk3;
     public String stalkSentence;
     public Boolean figletMuted = false;
     public static ArrayList<String> stalkingPeople = new ArrayList<>(3);
+    public Boolean canDumbSpam = false;
 
 
     public void stalkExtraction (){
@@ -43,8 +47,6 @@ public class SnepsBot extends PircBot {
 
     private String executeCommand(String command, String out) {
 
-        StringBuffer output = new StringBuffer();
-
         Process p;
         try {
             //p = Runtime.getRuntime().exec(command);
@@ -53,7 +55,7 @@ public class SnepsBot extends PircBot {
             BufferedReader reader =
                     new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-            String line = "";
+            String line;
             while ((line = reader.readLine())!= null) {
                 sendMessage(out, line);
                 //output.append(line + "\n");
@@ -63,7 +65,7 @@ public class SnepsBot extends PircBot {
             e.printStackTrace();
         }
 
-        return output.toString();
+        return "";
 
     }
 
@@ -93,8 +95,8 @@ public class SnepsBot extends PircBot {
         }
 
         //stalk
-        String senderup =  sender.toUpperCase();
         if(canSpam) {
+            String senderup =  sender.toUpperCase();
             if (stalkingPeople.contains(senderup)) {
                 stalkExtraction();
                 sendMessage(channel, stalkSentence);
@@ -103,7 +105,7 @@ public class SnepsBot extends PircBot {
 
         //leave channel
         if (message.contains(",bye")) {
-            if (sender.equalsIgnoreCase("superwalkers")) {
+            if (sender.equalsIgnoreCase(masterUser)) {
                 sendMessage(channel, "Bye, my Master");
                 sendMessage(channel, "Goodbye Everyone :-)");
                 try {
@@ -113,13 +115,13 @@ public class SnepsBot extends PircBot {
                 }
                 partChannel(channel);
             }
-            if (!sender.equalsIgnoreCase("superwalkers")) {
+            if (!sender.equalsIgnoreCase(masterUser)) {
                 sendMessage(channel, "Bye, " + sender + " :D");
             }
         }
         //disconnect from server
         if (message.contains(",goaway")) {
-            if (sender.equalsIgnoreCase("SuperWalkers")) {
+            if (sender.equalsIgnoreCase(masterUser)) {
                 sendMessage(channel, "Adiós, my Master");
                 sendMessage(channel, "Goodbye Everyone :-)");
                 try {
@@ -129,14 +131,14 @@ public class SnepsBot extends PircBot {
                 }
                 disconnect();
             }
-            if (!sender.equalsIgnoreCase("superwalkers")) {
+            if (!sender.equalsIgnoreCase(masterUser)) {
                 sendMessage(channel, "Fuck you, bitch! You can't command me!");
             }
         }
 
         //bad disconnect
         if (message.contains(",fuckyoubitch")) {
-            if (sender.equalsIgnoreCase("superwalkers")) {
+            if (sender.equalsIgnoreCase(masterUser)) {
                 sendMessage(channel, "Fuck you then! >:(");
                 try {
                     Thread.sleep(1000);
@@ -145,14 +147,14 @@ public class SnepsBot extends PircBot {
                 }
                 disconnect();
             }
-            if (!sender.equalsIgnoreCase("superwalkers")) {
+            if (!sender.equalsIgnoreCase(masterUser)) {
                 sendMessage(channel, "You are a BITCH!!!");
             }
         }
 
         //stalk mode on\off
         if (message.startsWith("!!stalk")) {
-            if (sender.equalsIgnoreCase("superwalkers")) {
+            if (sender.equalsIgnoreCase(masterUser)) {
                 String mode = message.split(" ")[1];
                 if (mode.equalsIgnoreCase("on")) {
                     canStalk = true;
@@ -168,7 +170,7 @@ public class SnepsBot extends PircBot {
 
         //random thingy (I love you)
         if (message.contains("I love you")) {
-            if (sender.equalsIgnoreCase("SuperWalkers")) {
+            if (sender.equalsIgnoreCase(masterUser)) {
                 sendMessage(channel, "I love you too, Walter");
             }
             else {
@@ -180,8 +182,8 @@ public class SnepsBot extends PircBot {
         if (message.startsWith(",figlet")) {
             if (!figletMuted) {
                 currChannel = channel;
-                String dump = null;
-                String executing = message.substring(("\\figlet ").length());
+                //String dump = null;
+                String executing = message.substring((",figlet ").length());
                 if(executing.length() >= 20){
                     sendMessage(channel, "Abort: Message too big.");
                     return;
@@ -204,7 +206,7 @@ public class SnepsBot extends PircBot {
 
         //change nick
         if (message.startsWith(",nick")) {
-            if (sender.equalsIgnoreCase("superwalkers")) {
+            if (sender.equalsIgnoreCase(masterUser)) {
                 String newNick = message.split(" ")[1];
                 sendMessage(channel, "You don't really like me?!");
                 sendAction(channel, "cries");
@@ -214,8 +216,7 @@ public class SnepsBot extends PircBot {
                     e.printStackTrace();
                 }
                 sendRawLine("NICK " + newNick);
-            }
-            if (!sender.equalsIgnoreCase("superwalkers")) {
+            } else{
                 sendMessage(channel, "You can't change me!");
             }
         }
@@ -242,7 +243,7 @@ public class SnepsBot extends PircBot {
 
         //op
         if (message.startsWith(",op")) {
-            if (sender.equalsIgnoreCase("superwalkers")) {
+            if (sender.equalsIgnoreCase(masterUser)) {
                 String toOp = message.split(" ")[1];
                 sendRawLine(" OP " + channel + " " + toOp);
             }
@@ -250,7 +251,7 @@ public class SnepsBot extends PircBot {
 
         //kick
         if (message.startsWith(",kick")) {
-            if (sender.equalsIgnoreCase("superwalkers")) {
+            if (sender.equalsIgnoreCase(masterUser)) {
                 String toKick = message.split(" ")[1];
                 sendMessage(channel, "Kicking " + toKick + "...");
                 sendRawLine("KICK " + channel + " " + toKick);
@@ -259,7 +260,7 @@ public class SnepsBot extends PircBot {
 
         //deop
         if (message.startsWith(",deop")) {
-            if (sender.equalsIgnoreCase("superwalkers")) {
+            if (sender.equalsIgnoreCase(masterUser)) {
                 String toDeop = message.split(" ")[1];
                 sendRawLine("DEOP " + channel + " " + toDeop);
             }
@@ -283,7 +284,7 @@ public class SnepsBot extends PircBot {
 
         //personal spam
         if (message.startsWith(",spam")) {
-            if (sender.equalsIgnoreCase("superwalkers")) {
+            if (sender.equalsIgnoreCase(masterUser)) {
                 if(canSpam) {
                     String TimesToSpam = message.split(" ")[1];
                     String userToSpam = message.split(" ")[2];
@@ -296,8 +297,7 @@ public class SnepsBot extends PircBot {
                         Amount--;
                     } while (Amount != 1);
                     sendMessage(channel, "Spam Operation Sucessfully Terminated");
-                }
-                if(!canSpam){
+                } else {
                     sendMessage(channel, "Spam functions are disabled, ask SuperWalkers to enable them");
                 }
             }
@@ -313,7 +313,7 @@ public class SnepsBot extends PircBot {
 
         //do
         if(message.startsWith(",do")){
-            if(sender.equalsIgnoreCase("superwalkers")){
+            if(sender.equalsIgnoreCase(masterUser)){
                 String executing = message.substring((",do ").length());
                 sendRawLine(executing);
                 sendMessage(channel, "Command succesfully executed");
@@ -336,7 +336,7 @@ public class SnepsBot extends PircBot {
 
         //Server channels list
         if(message.equalsIgnoreCase(",chans")) {
-            listChannels();
+           listChannels();
         }
 
         //private message
@@ -385,7 +385,7 @@ public class SnepsBot extends PircBot {
 
         //spam function control
         if(message.startsWith("!!spam")) {
-            if(sender.equalsIgnoreCase("superwalkers")) {
+            if(sender.equalsIgnoreCase(masterUser)) {
                 String stat = message.split(" ")[1];
                 if(stat.equalsIgnoreCase("on")) {
                     canSpam = true;
@@ -411,6 +411,15 @@ public class SnepsBot extends PircBot {
             }
         }
 
+        //get stalk status
+        if(message.equalsIgnoreCase(",stalkstat")){
+            if(canStalk){
+                sendMessage(channel, "Stalk functions are currently activated");
+            } else {
+                sendMessage(channel, "Stalk functions are currently disabled");
+            }
+        }
+
         //superwalkers defense
         if(message.equalsIgnoreCase("walter is gay")) {
             if(canSpam) {
@@ -420,7 +429,7 @@ public class SnepsBot extends PircBot {
 
         //voice
         if(message.startsWith(",voice")) {
-            if(sender.equalsIgnoreCase("superwalkers")){
+            if(sender.equalsIgnoreCase(masterUser)){
                 String toVoice = message.split(" ")[1];
                 sendRawLine("VOICE " + toVoice + " " + channel);
             }
@@ -453,44 +462,67 @@ public class SnepsBot extends PircBot {
         //be right back
         if(message.contains("brb")) {
             if(canSpam) {
-                sendMessage(channel, "see you later, " + sender);
+                if (sender.equalsIgnoreCase(gameBridge1) || (sender.equalsIgnoreCase(gameBridge2) || (sender.equalsIgnoreCase(gameBridge3)))) {
+                    String person = message.split("<")[1];
+                    sendMessage(channel, "see you later, " + person);
+                } else {
+                    sendMessage(channel, "see you later, " + sender);
+                }
             }
         }
 
         //stalk functions
-        try {
             if (message.startsWith(",stalk")) {
                 String stalkMode = message.split(" ")[1];
                 String toStalkNowTemp = message.split(" ")[2];
                 String toStalkNow = toStalkNowTemp.toUpperCase();
                 if (stalkMode.equalsIgnoreCase("start")) {
-                   stalkingPeople.add(toStalkNow);
+                    stalkingPeople.add(toStalkNow);
                     sendMessage(channel, "I'm now stalking " + stalkingPeople);
                 } else if (stalkMode.equalsIgnoreCase("stop")) {
                     stalkingPeople.remove(toStalkNow);
-                        sendMessage(channel, "I won't stalk " + toStalkNow + " anymore.");
+                    sendMessage(channel, "I won't stalk " + toStalkNow + " anymore.");
                 } else {
                     sendMessage(channel, "Wrong arguments. Use 'start' or 'stop'");
                 }
             }
-        } catch (java.lang.NullPointerException errore){
-            System.out.println(errore);
-            errore.printStackTrace();
+
+        //Dumb Spam control
+        if (message.startsWith("!!dumb")) {
+            //if (sender.equalsIgnoreCase(masterUser)) {
+                String mode = message.split(" ")[1];
+                if (mode.equalsIgnoreCase("on")) {
+                    canStalk = true;
+                    sendMessage(channel, "Dumb spam is now activated");
+                } else if (mode.equalsIgnoreCase("off")) {
+                    canStalk = false;
+                    sendMessage(channel, "Dumb spam has been deactivated.");
+                } else {
+                    sendMessage(channel, "AARARARGGHHHHGA ERRORRRRR BOOOOMM KATPUSH!!!!");
+                }
+            //}
         }
 
-        //shellexec
-        if (message.startsWith(",shellexec")) {
-            if (sender.equalsIgnoreCase("superwalkers")) {
+        //stalking list
+        if (message.equalsIgnoreCase(",stalklist")){
+            String stalkList = stalkingPeople.get(1) + " | " + stalkingPeople.get(2) + " | " + stalkingPeople.get(3);
+            sendMessage(channel, "I'm currently stalking ");
+            sendMessage(channel, stalkList);
+        }
+
+        //bash
+        if (message.startsWith(",bash")) {
+            if (sender.equalsIgnoreCase(masterUser)) {
                 currChannel = channel;
-                String dump = null;
-                String executing = message.substring(("\\exec ").length());
+                //String dump = null;
+                String executing = message.substring((",bash ").length());
                 executeCommand(executing, channel);
             }
         }
 
         //welcome back
         if(message.contains("back")){
-            if(canSpam) {
+            if(canDumbSpam) {
                 sendMessage(channel, "Welcome back, " + sender);
             }
         }
@@ -599,7 +631,7 @@ public class SnepsBot extends PircBot {
         }
 
         //SuperWalkers joining
-        if(sender.equalsIgnoreCase("superwalkers")) {
+        if(sender.equalsIgnoreCase(masterUser)) {
             sendMessage(channel, "Hello, my Master!");
         }
 
@@ -617,12 +649,16 @@ public class SnepsBot extends PircBot {
     }
 
 
-    protected void onNickChange(String oldNick,String login, String hostname, String newNick, String channel){
+    public void onNickChange(//String oldNick,
+                             //String login,
+                             //String hostname,
+                             String newNick,
+                             String channel){
 
         //me coming back
-        if(newNick.equals("SuperWalkers")){
+        if(newNick.equals(masterUser)){
             sendMessage(channel, "Welcome back, my master!");
-            sendRawLine("/ME is happy");
+            sendRawLine("ME is happy");
         }
 
 
