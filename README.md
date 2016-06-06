@@ -1,6 +1,8 @@
 SnepsBot
 ========
-** SuperWalkers's bot ultra powah **
-========
 
-Welcome to the SnepsBot's GitHub page!
+##Project discontinued
+I'm not deleting it since I may need it as a reference for something (idk what) one day
+
+Please refer to [SnepsBotX](https://github.com/Walkersneps/SnepsBotX "SnepsBotX repository").
+
